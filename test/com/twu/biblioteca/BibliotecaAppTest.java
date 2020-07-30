@@ -17,7 +17,11 @@ import static org.junit.Assert.assertEquals;
  */
 public class BibliotecaAppTest {
     private static final String WELCOME = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
-    private static final String BOOKS = "BOOK A\nBOOK B\nBOOK C\nBOOK D\n";
+    private static final String BOOKS =
+            "name: BOOK A, author: author A, published: 2010\n" +
+            "name: BOOK B, author: author B, published: 2011\n" +
+            "name: BOOK C, author: author C, published: 2012\n" +
+            "name: BOOK D, author: author D, published: 2013\n";
 
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private ByteArrayOutputStream errContent = new ByteArrayOutputStream();
