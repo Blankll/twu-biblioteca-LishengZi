@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class BibliotecaAppTest {
     private static final String WELCOME = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n";
+    private static final String BOOKS = "BOOK A\nBOOK B\nBOOK C\nBOOK D\n";
 
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -31,9 +32,15 @@ public class BibliotecaAppTest {
         System.setOut(System.out);
         System.setErr(System.err);
     }
+
     @Test
-    public void wellcomeTest() {
-        BibliotecaApp.main(null);
+    public void printWelcomeTest() {
+        BibliotecaApp.printWelcome();
         assertEquals(WELCOME, outContent.toString());
+    }
+    @Test
+    public void printBooksTest() {
+        BibliotecaApp.printBooks();
+        assertEquals(BOOKS, outContent.toString());
     }
 }
