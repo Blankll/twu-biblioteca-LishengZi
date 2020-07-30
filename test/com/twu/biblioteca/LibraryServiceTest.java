@@ -4,6 +4,7 @@ import com.twu.biblioteca.entities.Book;
 import com.twu.biblioteca.entities.Library;
 import com.twu.biblioteca.services.LibraryService;
 import com.twu.biblioteca.services.impls.LibraryServiceImpl;
+import com.twu.biblioteca.tools.Message;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * @author: Blank
@@ -25,10 +25,7 @@ import static org.junit.Assert.assertNull;
  * @version: 1.0
  */
 public class LibraryServiceTest {
-    private static final String WELCOME = Library.WELCOME + "\n";
-    private static final String MENU = Library.NOTICE + "\n" + Library.MENU + "\nwait input: ";
-    private static final String MENU_WRONG = "Please select a valid option!\n";
-
+    private static final String MENU = Library.NOTICE + "\n" + Library.MENU + "\n" + Message.MENU_INFO;
     private InputStream defaultIn = System.in;
     private PrintStream defaultOut = System.out, defaultErr = System.err;
 
@@ -51,7 +48,7 @@ public class LibraryServiceTest {
     @Test
     public void printWelcomeTest() {
         libraryService.printWelcome();
-        assertEquals(WELCOME, outContent.toString());
+        assertEquals(Library.WELCOME + "\n", outContent.toString());
     }
     @Test
     public void printBooksTest() {
@@ -63,21 +60,27 @@ public class LibraryServiceTest {
     public void menuTestRight() {
         System.setIn(new ByteArrayInputStream("1 -1".getBytes()));
         libraryService.libraryMenu(new Scanner(System.in));
-        assertEquals(MENU + this.bookList() + "wait input: ", outContent.toString());
+        assertEquals(MENU + this.bookList() + Message.MENU_INFO, outContent.toString());
     }
     @Test
     public void menuTestWrong() {
         System.setIn(new ByteArrayInputStream("5 -1".getBytes()));
         libraryService.libraryMenu(new Scanner(System.in));
-        assertEquals(MENU + "wait input: ", outContent.toString());
-        assertEquals(MENU_WRONG, errContent.toString());
+        assertEquals(MENU + Message.MENU_INFO, outContent.toString());
+        assertEquals(Message.INPUT_INVALID + "\n", errContent.toString());
     }
 
     @Test
-    public void checkOutTest() {
+    public void checkOutTestRight() {
         Boolean result = libraryService.checkOut(1);
-        assertEquals("Thank you! Enjoy the book\n", outContent.toString());
+        assertEquals(Message.BOOK_VALID + "\n", outContent.toString());
         assertEquals(true, result);
+    }
+    @Test
+    public void checkOutTestWrong() {
+        Boolean result = libraryService.checkOut(1);
+        assertEquals(Message.BOOK_INVALID + "\n", errContent.toString());
+        assertEquals(false, result);
     }
 
     private String bookList() {

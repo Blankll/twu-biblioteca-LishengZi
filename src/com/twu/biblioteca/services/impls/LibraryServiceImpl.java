@@ -3,6 +3,7 @@ package com.twu.biblioteca.services.impls;
 import com.twu.biblioteca.entities.Book;
 import com.twu.biblioteca.entities.Library;
 import com.twu.biblioteca.services.LibraryService;
+import com.twu.biblioteca.tools.Message;
 
 import java.util.List;
 import java.util.Scanner;
@@ -34,29 +35,30 @@ public class LibraryServiceImpl implements LibraryService {
         System.out.println(Library.NOTICE);
         System.out.println(Library.MENU);
         while (true) {
-            System.out.print("wait input: ");
+            System.out.print(Message.MENU_INFO);
             int ops = this.getScanVal(scanner);
             if (ops == 1) { this.printBooks(); }
             // checkout book
             else if (ops == 2) {
                 this.printBooks();
-                System.out.print("input Book id: ");
+                System.out.print(Message.BOOK_ID);
                 int bookId = this.getScanVal(scanner);
                 this.checkOut(bookId);
-                this.printBooks();
             }
             else if (ops == -1) { break; }
-            else { System.err.println("Please select a valid option!"); }
+            else { System.err.println(Message.INPUT_INVALID); }
         }
     }
 
     @Override
     public Boolean checkOut(int id) {
         Book book = library.getBooks().get(id);
-        if (null == book) { return false; }
-        if (!book.getState()) { return false; }
+        if (null == book || !book.getState()) {
+            System.err.println(Message.BOOK_INVALID);
+            return false;
+        }
         book.setState(false);
-        System.out.println("Thank you! Enjoy the book");
+        System.out.println(Message.BOOK_VALID);
 
         return true;
     }
