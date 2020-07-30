@@ -90,6 +90,12 @@ public class LibraryServiceTest {
         assertEquals(Message.BOOK_VALID + "\n" + Message.BOOK_RETURN_VALID + "\n", outContent.toString());
         assertEquals(true, result);
     }
+    @Test
+    public void returnBookTestWrong() {
+        Boolean result = libraryService.returnBook(2);
+        assertEquals(Message.BOOK_RETURN_INVALID + "\n", errContent.toString());
+        assertEquals(false, result);
+    }
 
 
     /**

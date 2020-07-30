@@ -77,6 +77,7 @@ public class LibraryServiceImpl implements LibraryService {
     public Boolean returnBook(int id) {
         Book book = library.getBooks().get(id);
         if (null == book || book.getState()) {
+            System.err.println(Message.BOOK_RETURN_INVALID);
             return false;
         }
         book.setState(true);
