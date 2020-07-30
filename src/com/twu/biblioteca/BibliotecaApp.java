@@ -4,6 +4,7 @@ import com.twu.biblioteca.entities.Book;
 
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class BibliotecaApp {
     private static final String WELCOME = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
@@ -21,7 +22,8 @@ public class BibliotecaApp {
 
     public static void main(String[] args) {
         printWelcome();
-        printBooks();
+        BibliotecaApp app = new BibliotecaApp();
+        app.libraryMenu(new Scanner(System.in));
     }
 
     public static void printWelcome() {
@@ -32,6 +34,21 @@ public class BibliotecaApp {
             String outStr = "name: " + item.getName() + ", author: " + item.getAuthor() + ", published: " +item.getPublished();
             System.out.println(outStr);
         }
+    }
+
+    public void libraryMenu(Scanner scanner) {
+        System.out.println("There is a list of menu you can input for next operation:");
+        System.out.println("[1] List of books");
+        while (true) {
+            System.out.print("wait input:");
+            int ops = scanner.nextInt();
+            if (ops == 1) { printBooks(); }
+            else if (ops == -1) { break; }
+            else {
+                System.err.println("please input the right number within the menu!");
+            }
+        }
+
     }
 
 }
