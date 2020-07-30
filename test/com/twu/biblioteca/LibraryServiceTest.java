@@ -76,7 +76,8 @@ public class LibraryServiceTest {
     @Test
     public void checkOutTest() {
         Boolean result = libraryService.checkOut(1);
-        assertNull(result);
+        assertEquals("Thank you! Enjoy the book\n", outContent.toString());
+        assertEquals(true, result);
     }
 
     private String bookList() {

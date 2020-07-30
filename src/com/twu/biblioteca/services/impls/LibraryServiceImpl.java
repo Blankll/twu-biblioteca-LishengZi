@@ -52,11 +52,13 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public Boolean checkOut(int id) {
-        try {
-            library.getBooks().get(id).setState(false);
-        } finally { }
+        Book book = library.getBooks().get(id);
+        if (null == book) { return false; }
+        if (!book.getState()) { return false; }
+        book.setState(false);
+        System.out.println("Thank you! Enjoy the book");
 
-        return null;
+        return true;
     }
 
     /**
