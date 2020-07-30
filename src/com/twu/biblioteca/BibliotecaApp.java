@@ -39,16 +39,14 @@ public class BibliotecaApp {
     public void libraryMenu(Scanner scanner) {
         System.out.println("There is a list of menu you can input for next operation:");
         System.out.println("[1] List of books");
+        System.out.println("[-1] quit");
         while (true) {
             System.out.print("wait input:");
             int ops = scanner.nextInt();
             if (ops == 1) { printBooks(); }
             else if (ops == -1) { break; }
-            else {
-                System.err.println("please input the right number within the menu!");
-            }
+            else { System.err.println("Please select a valid option!"); }
         }
-
     }
 
 }

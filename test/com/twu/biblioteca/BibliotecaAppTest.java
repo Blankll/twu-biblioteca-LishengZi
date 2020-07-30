@@ -27,8 +27,8 @@ public class BibliotecaAppTest {
             "name: BOOK D, author: author D, published: 2013\n";
     private static final String MENU =
             "There is a list of menu you can input for next operation:\n" +
-            "[1] List of books\nwait input:";
-    private static final String MENU_WRONG = "please input the right number within the menu!\n";
+            "[1] List of books\n[-1] quit\nwait input:";
+    private static final String MENU_WRONG = "Please select a valid option!\n";
 
     private InputStream defaultIn = System.in;
     private PrintStream defaultOut = System.out, defaultErr = System.err;
