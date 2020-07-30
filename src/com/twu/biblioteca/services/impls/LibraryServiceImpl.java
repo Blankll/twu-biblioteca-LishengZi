@@ -37,16 +37,26 @@ public class LibraryServiceImpl implements LibraryService {
         while (true) {
             System.out.print(Message.MENU_INFO);
             int ops = this.getScanVal(scanner);
-            if (ops == 1) { this.printBooks(); }
-            // checkout book
-            else if (ops == 2) {
-                this.printBooks();
-                System.out.print(Message.BOOK_ID);
-                int bookId = this.getScanVal(scanner);
-                this.checkOut(bookId);
+            switch (ops) {
+                // exit system
+                case -1: return;
+                // print book list
+                case 1: this.printBooks(); break;
+                // checkout book
+                case 2:
+                    this.printBooks();
+                    System.out.print(Message.BOOK_ID);
+                    int bookId = this.getScanVal(scanner);
+                    this.checkOut(bookId);
+                    break;
+                // return book
+                case 3:
+                    System.out.print(Message.BOOK_ID);
+                    int id = this.getScanVal(scanner);
+                    this.returnBook(id);
+                    break;
+                default: System.err.println(Message.INPUT_INVALID);
             }
-            else if (ops == -1) { break; }
-            else { System.err.println(Message.INPUT_INVALID); }
         }
     }
 
@@ -61,6 +71,15 @@ public class LibraryServiceImpl implements LibraryService {
         System.out.println(Message.BOOK_VALID);
 
         return true;
+    }
+
+    @Override
+    public Boolean returnBook(int id) {
+        try {
+            library.getBooks().get(id).setState(true);
+        } finally { }
+
+        return null;
     }
 
     /**

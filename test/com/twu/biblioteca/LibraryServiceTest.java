@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author: Blank
@@ -82,7 +83,16 @@ public class LibraryServiceTest {
         assertEquals(Message.BOOK_INVALID + "\n", errContent.toString());
         assertEquals(false, result);
     }
+    @Test
+    public void returnBookTest() {
+        Boolean result = libraryService.returnBook(1);
+        assertNull(result);
+    }
 
+    /**
+     * print current bookList
+     * @return
+     */
     private String bookList() {
         String str = "";
         List<Book> books = Library.getInstance().getBooks();
