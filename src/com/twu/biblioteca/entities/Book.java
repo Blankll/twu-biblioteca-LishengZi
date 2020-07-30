@@ -12,6 +12,7 @@ public class Book {
     private String name;
     private String author;
     private Year published;
+    private Boolean state = true;
 
     public Book() {
     }
@@ -44,5 +45,13 @@ public class Book {
 
     public void setPublished(Year published) {
         this.published = published;
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
     }
 }

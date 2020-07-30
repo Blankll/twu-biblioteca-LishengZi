@@ -17,4 +17,5 @@ public interface LibraryService {
 
     void printBooks();
     void libraryMenu(Scanner scanner);
+    Boolean checkOut(int id);
 }

@@ -12,7 +12,8 @@ import java.util.List;
  */
 public class Library {
     public static final String WELCOME = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-
+    public static final String NOTICE = "There is a list of menu you can input for next operation:";
+    public static final String MENU = "[1] List of books\n[2] Check out books\n[-1] quit";
     private static final ArrayList<Book> BOOKS = new ArrayList<>();
 
     private Library() {

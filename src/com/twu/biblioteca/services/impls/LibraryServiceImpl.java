@@ -18,23 +18,57 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public void printBooks() {
         List<Book> books = library.getBooks();
-        for (Book item : books) {
-            String outStr = "name: " + item.getName() + ", author: " + item.getAuthor() + ", published: " +item.getPublished();
-            System.out.println(outStr);
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getState()) {
+                String outStr = "[id] " + i +
+                        ", [name]: " + books.get(i).getName() +
+                        ", [author]: " + books.get(i).getAuthor() +
+                        ", [published]: " + books.get(i).getPublished();
+                System.out.println(outStr);
+            }
         }
     }
 
     @Override
     public void libraryMenu(Scanner scanner) {
-        System.out.println("There is a list of menu you can input for next operation:");
-        System.out.println("[1] List of books");
-        System.out.println("[-1] quit");
+        System.out.println(Library.NOTICE);
+        System.out.println(Library.MENU);
         while (true) {
-            System.out.print("wait input:");
-            int ops = scanner.nextInt();
+            System.out.print("wait input: ");
+            int ops = this.getScanVal(scanner);
             if (ops == 1) { this.printBooks(); }
+            // checkout book
+            else if (ops == 2) {
+                this.printBooks();
+                System.out.print("input Book id: ");
+                int bookId = this.getScanVal(scanner);
+                this.checkOut(bookId);
+                this.printBooks();
+            }
             else if (ops == -1) { break; }
             else { System.err.println("Please select a valid option!"); }
         }
+    }
+
+    @Override
+    public Boolean checkOut(int id) {
+        try {
+            library.getBooks().get(id).setState(false);
+        } finally { }
+
+        return null;
+    }
+
+    /**
+     * parse console input value
+     * @param scanner
+     * @return Integer >= -1 | fail for -5
+     */
+    private int getScanVal(Scanner scanner) {
+        int result = - 5;
+        try { result = scanner.nextInt(); }
+        catch (Exception e) {};
+
+        return result;
     }
 }
