@@ -75,11 +75,14 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public Boolean returnBook(int id) {
-        try {
-            library.getBooks().get(id).setState(true);
-        } finally { }
+        Book book = library.getBooks().get(id);
+        if (null == book || book.getState()) {
+            return false;
+        }
+        book.setState(true);
+        System.out.println(Message.BOOK_RETURN_VALID);
 
-        return null;
+        return true;
     }
 
     /**

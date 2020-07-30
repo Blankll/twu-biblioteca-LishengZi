@@ -84,10 +84,13 @@ public class LibraryServiceTest {
         assertEquals(false, result);
     }
     @Test
-    public void returnBookTest() {
-        Boolean result = libraryService.returnBook(1);
-        assertNull(result);
+    public void returnBookTestRight() {
+        Boolean result = libraryService.checkOut(1);
+        result = libraryService.returnBook(1);
+        assertEquals(Message.BOOK_VALID + "\n" + Message.BOOK_RETURN_VALID + "\n", outContent.toString());
+        assertEquals(true, result);
     }
+
 
     /**
      * print current bookList
