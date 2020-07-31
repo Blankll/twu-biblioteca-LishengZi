@@ -6,7 +6,7 @@ import com.twu.biblioteca.services.LibraryService;
 import com.twu.biblioteca.tools.Message;
 
 import java.util.List;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * @author: Blank
@@ -17,85 +17,37 @@ import java.util.Scanner;
 public class LibraryServiceImpl implements LibraryService {
     private Library library = Library.getInstance();
     @Override
-    public void printBooks() {
-        List<Book> books = library.getBooks();
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getState()) {
-                String outStr = "[id] " + i +
-                        ", [name]: " + books.get(i).getName() +
-                        ", [author]: " + books.get(i).getAuthor() +
-                        ", [published]: " + books.get(i).getPublished();
-                System.out.println(outStr);
-            }
-        }
+    public List<Book> getAllAvailableBooks() {
+        return this.getAllBooks().stream().filter(Book::getState).collect(Collectors.toList());
     }
-
     @Override
-    public void libraryMenu(Scanner scanner) {
-        System.out.println(Library.NOTICE);
-        System.out.println(Library.MENU);
-        while (true) {
-            System.out.print(Message.MENU_INFO);
-            int ops = this.getScanVal(scanner);
-            switch (ops) {
-                // exit system
-                case -1: return;
-                // print book list
-                case 1: this.printBooks(); break;
-                // checkout book
-                case 2:
-                    this.printBooks();
-                    System.out.print(Message.BOOK_ID);
-                    int bookId = this.getScanVal(scanner);
-                    this.checkOut(bookId);
-                    break;
-                // return book
-                case 3:
-                    System.out.print(Message.BOOK_ID);
-                    int id = this.getScanVal(scanner);
-                    this.returnBook(id);
-                    break;
-                default: System.err.println(Message.INPUT_INVALID);
-            }
-        }
+    public List<Book> getAllBooks() { return library.getBooks(); }
+    public List<Book> getAllUnavailableBooks() {
+        return this.getAllBooks().stream().filter((i) -> !i.getState()).collect(Collectors.toList());
     }
-
     @Override
     public Boolean checkOut(int id) {
-        Book book = library.getBooks().get(id);
-        if (null == book || !book.getState()) {
+        try {
+            Book book = this.getAllAvailableBooks().stream().filter(item -> item.getId().equals(id)).findFirst().get();
+            book.setState(false);
+            System.out.println(Message.BOOK_VALID);
+            return true;
+        } catch (Exception e) {
             System.err.println(Message.BOOK_INVALID);
             return false;
         }
-        book.setState(false);
-        System.out.println(Message.BOOK_VALID);
-
-        return true;
     }
 
     @Override
     public Boolean returnBook(int id) {
-        Book book = library.getBooks().get(id);
-        if (null == book || book.getState()) {
+        try {
+            Book book = this.getAllUnavailableBooks().stream().filter(item -> item.getId() == id).findFirst().get();
+            book.setState(true);
+            System.out.println(Message.BOOK_RETURN_VALID);
+            return true;
+        } catch (Exception e) {
             System.err.println(Message.BOOK_RETURN_INVALID);
             return false;
         }
-        book.setState(true);
-        System.out.println(Message.BOOK_RETURN_VALID);
-
-        return true;
-    }
-
-    /**
-     * parse console input value
-     * @param scanner
-     * @return Integer >= -1 | fail for -5
-     */
-    private int getScanVal(Scanner scanner) {
-        int result = - 5;
-        try { result = scanner.nextInt(); }
-        catch (Exception e) {};
-
-        return result;
     }
 }

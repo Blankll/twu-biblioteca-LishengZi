@@ -1,6 +1,5 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.entities.Book;
 import com.twu.biblioteca.entities.Library;
 import com.twu.biblioteca.services.LibraryService;
 import com.twu.biblioteca.services.impls.LibraryServiceImpl;
@@ -8,16 +7,17 @@ import com.twu.biblioteca.tools.Message;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.List;
-import java.util.Scanner;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author: Blank
@@ -26,13 +26,14 @@ import static org.junit.Assert.assertNull;
  * @version: 1.0
  */
 public class LibraryServiceTest {
-    private static final String MENU = Library.NOTICE + "\n" + Library.MENU + "\n" + Message.MENU_INFO;
     private InputStream defaultIn = System.in;
     private PrintStream defaultOut = System.out, defaultErr = System.err;
 
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
+
+    @Mock
     LibraryService libraryService = new LibraryServiceImpl();
     @Before
     public void setUpStreams() {
@@ -47,73 +48,36 @@ public class LibraryServiceTest {
     }
 
     @Test
-    public void printWelcomeTest() {
+    public void shouldPrintWelcomeWhenLoadApplication() {
         libraryService.printWelcome();
         assertEquals(Library.WELCOME + "\n", outContent.toString());
     }
-    @Test
-    public void printBooksTest() {
-        libraryService.printBooks();
-        assertEquals(this.bookList(), outContent.toString());
-    }
+
 
     @Test
-    public void menuTestRight() {
-        System.setIn(new ByteArrayInputStream("1 -1".getBytes()));
-        libraryService.libraryMenu(new Scanner(System.in));
-        assertEquals(MENU + this.bookList() + Message.MENU_INFO, outContent.toString());
-    }
-    @Test
-    public void menuTestWrong() {
-        System.setIn(new ByteArrayInputStream("5 -1".getBytes()));
-        libraryService.libraryMenu(new Scanner(System.in));
-        assertEquals(MENU + Message.MENU_INFO, outContent.toString());
-        assertEquals(Message.INPUT_INVALID + "\n", errContent.toString());
-    }
-
-    @Test
-    public void checkOutTestRight() {
+    public void gitBookIdWhenCustomerCheckoutBookThenReturnTrue() {
         Boolean result = libraryService.checkOut(1);
-        assertEquals(Message.BOOK_VALID + "\n", outContent.toString());
+        assertThat(outContent.toString(), containsString(Message.BOOK_VALID));
         assertEquals(true, result);
     }
     @Test
-    public void checkOutTestWrong() {
+    public void gitBookIdWhenCustomerCheckoutBookAgainThenReturnFalse() {
         Boolean result = libraryService.checkOut(1);
         assertEquals(Message.BOOK_INVALID + "\n", errContent.toString());
         assertEquals(false, result);
     }
     @Test
-    public void returnBookTestRight() {
+    public void givenBookIdWhenReturnAnCheckedBookThenReturnTrue() {
         Boolean result = libraryService.checkOut(1);
         result = libraryService.returnBook(1);
-        assertEquals(Message.BOOK_VALID + "\n" + Message.BOOK_RETURN_VALID + "\n", outContent.toString());
+        assertThat(outContent.toString(), containsString(Message.BOOK_RETURN_VALID));
         assertEquals(true, result);
     }
     @Test
-    public void returnBookTestWrong() {
+    public void givenBookIdWhenReturnAnUncheckedBookThenReturnFalse() {
         Boolean result = libraryService.returnBook(2);
         assertEquals(Message.BOOK_RETURN_INVALID + "\n", errContent.toString());
         assertEquals(false, result);
     }
 
-
-    /**
-     * print current bookList
-     * @return
-     */
-    private String bookList() {
-        String str = "";
-        List<Book> books = Library.getInstance().getBooks();
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getState()) {
-                String outStr = "[id] " + i +
-                        ", [name]: " + books.get(i).getName() +
-                        ", [author]: " + books.get(i).getAuthor() +
-                        ", [published]: " + books.get(i).getPublished();
-                str += outStr + "\n";
-            }
-        }
-        return str;
-    }
 }

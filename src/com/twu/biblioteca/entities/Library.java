@@ -17,10 +17,10 @@ public class Library {
     private static final ArrayList<Book> BOOKS = new ArrayList<>();
 
     private Library() {
-        BOOKS.add(new Book("BOOK A", "author A", Year.of(2010)));
-        BOOKS.add(new Book("BOOK B", "author B", Year.of(2011)));
-        BOOKS.add(new Book("BOOK C", "author C", Year.of(2012)));
-        BOOKS.add(new Book("BOOK D", "author D", Year.of(2013)));
+        BOOKS.add(new Book(1, "BOOK A", "author A", Year.of(2010)));
+        BOOKS.add(new Book(2, "BOOK B", "author B", Year.of(2011)));
+        BOOKS.add(new Book(3, "BOOK C", "author C", Year.of(2012)));
+        BOOKS.add(new Book(4, "BOOK D", "author D", Year.of(2013)));
     }
 
     private static class InstanceHolder {

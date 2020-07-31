@@ -9,6 +9,7 @@ import java.time.Year;
  * @version: 1.0
  */
 public class Book {
+    private Integer id;
     private String name;
     private String author;
     private Year published;
@@ -17,35 +18,29 @@ public class Book {
     public Book() {
     }
 
-    public Book(String name, String author, Year published) {
+    public Book(Integer id, String name, String author, Year published) {
+        this.id = id;
         this.name = name;
         this.author = author;
         this.published = published;
     }
 
+    public Integer getId() {
+        return id;
+    }
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
 
     public Year getPublished() {
         return published;
     }
 
-    public void setPublished(Year published) {
-        this.published = published;
-    }
 
     public Boolean getState() {
         return state;
