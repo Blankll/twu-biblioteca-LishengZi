@@ -9,14 +9,14 @@ import java.util.Scanner;
 public class BibliotecaApp {
 
     private LibraryService libraryService = new LibraryServiceImpl();
-    private ConsoleView consoleView = new ConsoleView();
+    private ConsoleView consoleView = new ConsoleView(new Scanner(System.in));
 
     public static void main(String[] args) {
         BibliotecaApp app = new BibliotecaApp();
         // print welcome
         app.libraryService.printWelcome();
         // select menu
-        app.consoleView.consoleMenu(new Scanner(System.in));
+        app.consoleView.consoleMenu();
     }
 
 }

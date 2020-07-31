@@ -9,17 +9,11 @@ import com.twu.biblioteca.views.ConsoleView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -41,7 +35,7 @@ public class ConsoleViewTest {
     private ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
     private LibraryService libraryService = new LibraryServiceImpl();
-    private ConsoleView consoleView = new ConsoleView();
+    private ConsoleView consoleView;
 
     @Before
     public void setUpStreams() {
@@ -59,22 +53,23 @@ public class ConsoleViewTest {
 
     @Test
     public void shouldPrintBookListWhenCustomerChosePrintList() {
+        consoleView = new ConsoleView(new Scanner(System.in));
         consoleView.printBookList();
         List<Book> books = libraryService.getAllAvailableBooks();
         assertEquals(this.listStr(books), outContent.toString());
     }
 
     @Test
-    public void GivenmenuTestRight() {
-        System.setIn(new ByteArrayInputStream("1 -1".getBytes()));
-        consoleView.consoleMenu(new Scanner(System.in));
+    public void givenCheckListSequenceToMenuWhenConsoleMenuThenPrintContent() {
+        consoleView = new ConsoleView(new Scanner(new ByteArrayInputStream("1 -1".getBytes())));
+        consoleView.consoleMenu();
         String str = MENU + this.listStr(libraryService.getAllAvailableBooks())+ Message.MENU_INFO;
         assertEquals(str, outContent.toString());
     }
     @Test
-    public void menuTestWrong() {
-        System.setIn(new ByteArrayInputStream("5 -1".getBytes()));
-        consoleView.consoleMenu(new Scanner(System.in));
+    public void givenWrongMenuSequenceWhenConsoleMenuThenPrintErrorMessage() {
+        consoleView = new ConsoleView(new Scanner(new ByteArrayInputStream("5 -1".getBytes())));
+        consoleView.consoleMenu();
         assertEquals(MENU + Message.MENU_INFO, outContent.toString());
         assertEquals(Message.INPUT_INVALID + "\n", errContent.toString());
     }

@@ -16,6 +16,7 @@ import java.util.Scanner;
  * @version: 1.0
  */
 public class ConsoleView {
+    private Scanner scanner;
     private LibraryService libraryService = new LibraryServiceImpl();
     public void printBookList() {
         libraryService.getAllAvailableBooks().forEach((item) -> {
@@ -24,28 +25,28 @@ public class ConsoleView {
             System.out.println(outStr);
         });
     }
+    public ConsoleView(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
-    public void consoleMenu(Scanner scanner) {
+    public void consoleMenu() {
         System.out.println(Library.NOTICE);
         System.out.println(Library.MENU);
         while (true) {
             System.out.print(Message.MENU_INFO);
-            switch (this.getMenu(this.getScanVal(scanner))) {
+            switch (this.getMenu(this.getScanVal())) {
                 // exit system
                 case QUIT: return;
                 // print book list
                 case PRINT_LIST: this.printBookList(); break;
                 // checkout book
                 case CHECKOUT_BOOK:
-                    this.printBookList();
-                    System.out.print(Message.BOOK_ID);
-                    int bookId = this.getScanVal(scanner);
-                    this.libraryService.checkOut(bookId);
+
                     break;
                 // return book
                 case RETURN_BOOK:
                     System.out.print(Message.BOOK_ID);
-                    int id = this.getScanVal(scanner);
+                    int id = this.getScanVal();
                     this.libraryService.returnBook(id);
                     break;
                 default: System.err.println(Message.INPUT_INVALID);
@@ -53,14 +54,21 @@ public class ConsoleView {
         }
     }
 
+    private void checkOutMenu() {
+        this.printBookList();
+        System.out.print(Message.BOOK_ID);
+        int bookId = this.getScanVal();
+        this.libraryService.checkOut(bookId);
+    }
+
     /**
      * parse console input value
-     * @param scanner
+     * @param
      * @return Integer >= -1 | fail for -5
      */
-    private int getScanVal(Scanner scanner) {
+    private int getScanVal() {
         int result = - 5;
-        try { result = scanner.nextInt(); }
+        try { result = this.scanner.nextInt(); }
         catch (Exception e) {};
 
         return result;

@@ -55,13 +55,13 @@ public class LibraryServiceTest {
 
 
     @Test
-    public void gitBookIdWhenCustomerCheckoutBookThenReturnTrue() {
+    public void givenBookIdWhenCustomerCheckoutBookThenReturnTrue() {
         Boolean result = libraryService.checkOut(1);
         assertThat(outContent.toString(), containsString(Message.BOOK_VALID));
         assertEquals(true, result);
     }
     @Test
-    public void gitBookIdWhenCustomerCheckoutBookAgainThenReturnFalse() {
+    public void givenBookIdWhenCustomerCheckoutBookAgainThenReturnFalse() {
         Boolean result = libraryService.checkOut(1);
         assertEquals(Message.BOOK_INVALID + "\n", errContent.toString());
         assertEquals(false, result);
