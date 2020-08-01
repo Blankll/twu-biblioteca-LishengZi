@@ -33,14 +33,15 @@ public class ConsoleView {
             System.out.print(Message.MENU_INFO);
             switch (this.getMenu(this.getScanVal())) {
                 // exit system
-                case QUIT: {                              return; }
+                case QUIT: {                                return; }
                 // print book list
-                case PRINT_LIST: { this.printBookList();   break; }
+                case PRINT_LIST: { this.printBookList();     break; }
                 // checkout book
-                case CHECKOUT_BOOK: { this.checkOutMenu(); break; }
+                case CHECKOUT_BOOK: { this.checkOutMenu();   break; }
                 // return book
-                case RETURN_BOOK: { this.returnBookMenu(); break; }
-                case LIST_MOVIES: { this.printMovieList(); break; }
+                case RETURN_BOOK: { this.returnBookMenu();   break; }
+                case LIST_MOVIES: { this.printMovieList();   break; }
+                case CHECKOUT_MOVIE: { this.checkoutMovie(); break; }
                 default: { System.err.println(Message.INPUT_INVALID); }
             }
         }
@@ -62,6 +63,11 @@ public class ConsoleView {
     private void returnBookMenu() {
         System.out.print(Message.BOOK_ID);
         this.libraryService.returnBook(this.getScanVal());
+    }
+
+    private void checkoutMovie() {
+        this.printMovieList();
+        movieService.checkOut(this.getScanVal());
     }
 
     /**

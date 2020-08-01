@@ -34,7 +34,14 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Boolean checkOut(int id) {
-        return null;
+        try {
+            Movie movie = this.getAllAvailableMovies().stream().filter(item -> item.getId().equals(id)).findFirst().get();
+            movie.setState(false);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     @Override

@@ -9,6 +9,7 @@ package com.twu.biblioteca.entities;
 public class Movie {
     private Integer id;
     private String name;
+    private Boolean state = true;
 
     public Movie(Integer id, String name) {
         this.id = id;
@@ -18,5 +19,17 @@ public class Movie {
     @Override
     public String toString() {
         return "[id] " + id + ", [name]: " + name;
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

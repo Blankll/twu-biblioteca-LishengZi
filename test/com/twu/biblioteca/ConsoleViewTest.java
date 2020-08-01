@@ -88,7 +88,7 @@ public class ConsoleViewTest {
     }
     @Test
     public void givenWrongMenuSequenceWhenConsoleMenuThenPrintErrorMessage() {
-        scanner = new Scanner(new ByteArrayInputStream("5 -1".getBytes()));
+        scanner = new Scanner(new ByteArrayInputStream("7 -1".getBytes()));
         consoleView = new ConsoleView(scanner, libraryService, null);
         consoleView.consoleMenu();
         assertThat(errContent.toString(), containsString(Message.INPUT_INVALID));

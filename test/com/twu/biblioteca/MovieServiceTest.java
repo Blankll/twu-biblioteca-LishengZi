@@ -48,4 +48,9 @@ public class MovieServiceTest {
         List<Movie> res = movieService.getAllAvailableMovies();
         assertThat(res, equalTo(movies));
     }
+    @Test
+    public void givenIdWhenCustomerCheckoutMovieThenReturnTrue() {
+        Boolean res = movieService.checkOut(1);
+        assertThat(res, equalTo(true));
+    }
 }
