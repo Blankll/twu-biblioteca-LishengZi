@@ -15,7 +15,6 @@ import java.util.Map;
 public class Library {
     public static final String WELCOME = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     public static final String NOTICE = "There is a list of menu you can input for next operation:";
-//    public static final String MENU = "[1] List of books\t[2] Check out book\t[3] Return a book\t[4] List of movies [5] Check out movie\t[-1] quit";
     private static final ArrayList<Book> BOOKS = new ArrayList<>();
     private static final ArrayList<Movie> MOVIES = new ArrayList<>();
     private static final ArrayList<User> USERS = new ArrayList<>();
