@@ -13,14 +13,20 @@ import java.util.List;
 public class Library {
     public static final String WELCOME = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     public static final String NOTICE = "There is a list of menu you can input for next operation:";
-    public static final String MENU = "[1] List of books\n[2] Check out books\n[3] Return a book\n[-1] quit";
+    public static final String MENU = "[1] List of books\n[2] Check out books\n[3] Return a book\n[4] List of movies\n[-1] quit";
     private static final ArrayList<Book> BOOKS = new ArrayList<>();
+    private static final ArrayList<Movie> MOVIES = new ArrayList<>();
 
     private Library() {
         BOOKS.add(new Book(1, "BOOK A", "author A", Year.of(2010)));
         BOOKS.add(new Book(2, "BOOK B", "author B", Year.of(2011)));
         BOOKS.add(new Book(3, "BOOK C", "author C", Year.of(2012)));
         BOOKS.add(new Book(4, "BOOK D", "author D", Year.of(2013)));
+
+        MOVIES.add(new Movie(1, "MOVIE A"));
+        MOVIES.add(new Movie(2, "MOVIE B"));
+        MOVIES.add(new Movie(3, "MOVIE C"));
+        MOVIES.add(new Movie(4, "MOVIE D"));
     }
 
     private static class InstanceHolder {
@@ -29,4 +35,6 @@ public class Library {
     public static Library getInstance() { return InstanceHolder.instance; }
 
     public List<Book> getBooks() { return BOOKS; }
+
+    public List<Movie> getMovies() { return MOVIES; }
 }

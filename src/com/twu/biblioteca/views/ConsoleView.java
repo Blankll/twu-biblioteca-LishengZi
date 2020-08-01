@@ -2,7 +2,7 @@ package com.twu.biblioteca.views;
 
 import com.twu.biblioteca.entities.Library;
 import com.twu.biblioteca.services.LibraryService;
-import com.twu.biblioteca.services.impls.LibraryServiceImpl;
+import com.twu.biblioteca.services.MovieService;
 import com.twu.biblioteca.tools.MenuEum;
 import com.twu.biblioteca.tools.Message;
 
@@ -18,13 +18,12 @@ import java.util.Scanner;
 public class ConsoleView {
     private Scanner scanner;
     private LibraryService libraryService;
+    private MovieService movieService;
 
-    public void printBookList() {
-        libraryService.getAllAvailableBooks().forEach(System.out::println);
-    }
-    public ConsoleView(Scanner scanner, LibraryService libraryService) {
+    public ConsoleView(Scanner scanner, LibraryService libraryService, MovieService movieService) {
         this.scanner = scanner;
         this.libraryService = libraryService;
+        this.movieService = movieService;
     }
 
     public void consoleMenu() {
@@ -41,9 +40,18 @@ public class ConsoleView {
                 case CHECKOUT_BOOK: { this.checkOutMenu(); break; }
                 // return book
                 case RETURN_BOOK: { this.returnBookMenu(); break; }
+                case LIST_MOVIES: { this.printMovieList(); break; }
                 default: { System.err.println(Message.INPUT_INVALID); }
             }
         }
+    }
+
+    public void printBookList() {
+        libraryService.getAllAvailableBooks().forEach(System.out::println);
+    }
+
+    private void printMovieList() {
+        movieService.getAllAvailableMovies().forEach(System.out::println);
     }
 
     private void checkOutMenu() {

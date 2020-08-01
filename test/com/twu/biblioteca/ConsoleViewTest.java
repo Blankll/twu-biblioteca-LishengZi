@@ -62,7 +62,7 @@ public class ConsoleViewTest {
         books.add(new Book(2, "BOOK B", "author B", Year.of(2011)));
         when(library.getBooks()).thenReturn(books);
         this.libraryService = new LibraryServiceImpl(library);
-        consoleView = new ConsoleView(scanner, libraryService);
+        consoleView = new ConsoleView(scanner, libraryService, null);
     }
     @After
     public void restoreStreams() {
@@ -81,7 +81,7 @@ public class ConsoleViewTest {
     @Test
     public void givenCheckListSequenceToMenuWhenConsoleMenuThenPrintContent() {
         scanner = new Scanner(new ByteArrayInputStream("1 -1".getBytes()));
-        consoleView = new ConsoleView(scanner, libraryService);
+        consoleView = new ConsoleView(scanner, libraryService, null);
         consoleView.consoleMenu();
         String str = MENU + this.listStr(this.books)+ Message.MENU_INFO;
         assertEquals(str, outContent.toString());
@@ -89,7 +89,7 @@ public class ConsoleViewTest {
     @Test
     public void givenWrongMenuSequenceWhenConsoleMenuThenPrintErrorMessage() {
         scanner = new Scanner(new ByteArrayInputStream("5 -1".getBytes()));
-        consoleView = new ConsoleView(scanner, libraryService);
+        consoleView = new ConsoleView(scanner, libraryService, null);
         consoleView.consoleMenu();
         assertThat(errContent.toString(), containsString(Message.INPUT_INVALID));
     }
