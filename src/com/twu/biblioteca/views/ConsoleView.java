@@ -17,16 +17,14 @@ import java.util.Scanner;
  */
 public class ConsoleView {
     private Scanner scanner;
-    private LibraryService libraryService = new LibraryServiceImpl();
+    private LibraryService libraryService;
+
     public void printBookList() {
-        libraryService.getAllAvailableBooks().forEach((item) -> {
-            String outStr = "[id] " + item.getId() + ", [name]: " + item.getName() +
-                    ", [author]: " + item.getAuthor() + ", [published]: " + item.getPublished();
-            System.out.println(outStr);
-        });
+        libraryService.getAllAvailableBooks().forEach(System.out::println);
     }
-    public ConsoleView(Scanner scanner) {
+    public ConsoleView(Scanner scanner, LibraryService libraryService) {
         this.scanner = scanner;
+        this.libraryService = libraryService;
     }
 
     public void consoleMenu() {
@@ -36,20 +34,14 @@ public class ConsoleView {
             System.out.print(Message.MENU_INFO);
             switch (this.getMenu(this.getScanVal())) {
                 // exit system
-                case QUIT: return;
+                case QUIT: {                              return; }
                 // print book list
-                case PRINT_LIST: this.printBookList(); break;
+                case PRINT_LIST: { this.printBookList();   break; }
                 // checkout book
-                case CHECKOUT_BOOK:
-
-                    break;
+                case CHECKOUT_BOOK: { this.checkOutMenu(); break; }
                 // return book
-                case RETURN_BOOK:
-                    System.out.print(Message.BOOK_ID);
-                    int id = this.getScanVal();
-                    this.libraryService.returnBook(id);
-                    break;
-                default: System.err.println(Message.INPUT_INVALID);
+                case RETURN_BOOK: { this.returnBookMenu(); break; }
+                default: { System.err.println(Message.INPUT_INVALID); }
             }
         }
     }
@@ -57,8 +49,11 @@ public class ConsoleView {
     private void checkOutMenu() {
         this.printBookList();
         System.out.print(Message.BOOK_ID);
-        int bookId = this.getScanVal();
-        this.libraryService.checkOut(bookId);
+        this.libraryService.checkOut(this.getScanVal());
+    }
+    private void returnBookMenu() {
+        System.out.print(Message.BOOK_ID);
+        this.libraryService.returnBook(this.getScanVal());
     }
 
     /**

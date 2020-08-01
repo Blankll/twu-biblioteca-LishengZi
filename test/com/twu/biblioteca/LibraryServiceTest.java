@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.entities.Book;
 import com.twu.biblioteca.entities.Library;
 import com.twu.biblioteca.services.LibraryService;
 import com.twu.biblioteca.services.impls.LibraryServiceImpl;
@@ -14,10 +15,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @author: Blank
@@ -25,6 +31,7 @@ import static org.junit.Assert.assertThat;
  * @date: 7/30/20
  * @version: 1.0
  */
+@RunWith(MockitoJUnitRunner.class)
 public class LibraryServiceTest {
     private InputStream defaultIn = System.in;
     private PrintStream defaultOut = System.out, defaultErr = System.err;
@@ -33,12 +40,21 @@ public class LibraryServiceTest {
     private ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
 
+    LibraryService libraryService;
     @Mock
-    LibraryService libraryService = new LibraryServiceImpl();
+    Library library;
     @Before
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
+    }
+    @Before
+    public void prepareInjection() {
+        List<Book> books = new ArrayList<>();
+        books.add(new Book(1, "BOOK A", "author A", Year.of(2010)));
+        books.add(new Book(2, "BOOK B", "author B", Year.of(2011)));
+        when(library.getBooks()).thenReturn(books);
+        libraryService = new LibraryServiceImpl(library);
     }
     @After
     public void restoreStreams() {
@@ -58,26 +74,26 @@ public class LibraryServiceTest {
     public void givenBookIdWhenCustomerCheckoutBookThenReturnTrue() {
         Boolean result = libraryService.checkOut(1);
         assertThat(outContent.toString(), containsString(Message.BOOK_VALID));
-        assertEquals(true, result);
+        assertThat(result, equalTo(true));
     }
     @Test
     public void givenBookIdWhenCustomerCheckoutBookAgainThenReturnFalse() {
+        libraryService.checkOut(1);
         Boolean result = libraryService.checkOut(1);
-        assertEquals(Message.BOOK_INVALID + "\n", errContent.toString());
+        assertThat(errContent.toString(), containsString(Message.BOOK_INVALID));
         assertEquals(false, result);
     }
     @Test
     public void givenBookIdWhenReturnAnCheckedBookThenReturnTrue() {
-        Boolean result = libraryService.checkOut(1);
-        result = libraryService.returnBook(1);
+        libraryService.checkOut(1);
+        Boolean result = libraryService.returnBook(1);
         assertThat(outContent.toString(), containsString(Message.BOOK_RETURN_VALID));
-        assertEquals(true, result);
+        assertThat(result, equalTo(true));
     }
     @Test
     public void givenBookIdWhenReturnAnUncheckedBookThenReturnFalse() {
         Boolean result = libraryService.returnBook(2);
-        assertEquals(Message.BOOK_RETURN_INVALID + "\n", errContent.toString());
-        assertEquals(false, result);
+        assertThat(errContent.toString(), containsString(Message.BOOK_RETURN_INVALID));
+        assertThat(result, equalTo(false));
     }
-
 }

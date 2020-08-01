@@ -49,4 +49,10 @@ public class Book {
     public void setState(Boolean state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "[id] " + id + ", [name]: " + name +
+                ", [author]: " + author + ", [published]: " + published;
+    }
 }

@@ -15,13 +15,18 @@ import java.util.stream.Collectors;
  * @version: 1.0
  */
 public class LibraryServiceImpl implements LibraryService {
-    private Library library = Library.getInstance();
+    private Library library;
+
+    public LibraryServiceImpl(Library library) {
+        this.library = library;
+    }
     @Override
     public List<Book> getAllAvailableBooks() {
         return this.getAllBooks().stream().filter(Book::getState).collect(Collectors.toList());
     }
     @Override
     public List<Book> getAllBooks() { return library.getBooks(); }
+    @Override
     public List<Book> getAllUnavailableBooks() {
         return this.getAllBooks().stream().filter((i) -> !i.getState()).collect(Collectors.toList());
     }
