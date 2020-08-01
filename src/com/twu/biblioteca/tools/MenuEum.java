@@ -7,17 +7,25 @@ package com.twu.biblioteca.tools;
  * @version: 1.0
  */
 public enum MenuEum {
-    QUIT(-1),
-    PRINT_LIST(1),
-    CHECKOUT_BOOK(2),
-    RETURN_BOOK(3),
-    LIST_MOVIES(4),
-    CHECKOUT_MOVIE(5),
-    INVALID(-5);
+    QUIT(-1, "quit"),
+    PRINT_LIST(1, "List of books"),
+    CHECKOUT_BOOK(2, "Check out book"),
+    RETURN_BOOK(3, "Return a book"),
+    VIEW_CHECKED(4, "View books checked out"),
+    LIST_MOVIES(5, "List of movies"),
+    CHECKOUT_MOVIE(6, "Check out movie"),
+    VIEW_INFO(7, "View info"),
+    INVALID(-5, null);
     private final int val;
-    MenuEum(int val) { this.val = val; }
+    private final String str;
+    MenuEum(int val, String str) {
+        this.val = val;
+        this.str = str;
+    }
 
     public int getVal() {
         return val;
     }
+
+    public String getStr() { return str; }
 }

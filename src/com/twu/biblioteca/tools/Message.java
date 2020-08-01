@@ -14,5 +14,8 @@ public class Message {
     public static final String BOOK_VALID = "Thank you! Enjoy the book";
     public static final String BOOK_RETURN_VALID = "Thank you for returning the book";
     public static final String BOOK_RETURN_INVALID = "That is not a valid book to return.";
+    public static final String MOVIE_ID = "MOVIE ID: ";
+    public static final String LOGIN_USERNAME = "input username: ";
+    public static final String LOGIN_PASSWORD = "input password: ";
 
 }

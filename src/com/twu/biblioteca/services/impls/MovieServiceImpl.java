@@ -5,6 +5,7 @@ import com.twu.biblioteca.entities.Movie;
 import com.twu.biblioteca.services.MovieService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author: Blank
@@ -24,7 +25,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> getAllAvailableMovies() {
-        return this.getAllMovies();
+        return this.getAllMovies().stream().filter(Movie::getState).collect(Collectors.toList());
     }
 
     @Override
@@ -41,7 +42,6 @@ public class MovieServiceImpl implements MovieService {
         } catch (Exception e) {
             return false;
         }
-
     }
 
     @Override

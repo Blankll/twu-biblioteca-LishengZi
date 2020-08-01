@@ -2,6 +2,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.entities.Book;
 import com.twu.biblioteca.entities.Library;
+import com.twu.biblioteca.entities.User;
 import com.twu.biblioteca.services.LibraryService;
 import com.twu.biblioteca.services.impls.LibraryServiceImpl;
 import com.twu.biblioteca.tools.Message;
@@ -17,10 +18,10 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -43,6 +44,7 @@ public class LibraryServiceTest {
     LibraryService libraryService;
     @Mock
     Library library;
+    List<Book> books = new ArrayList<>();
     @Before
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
@@ -50,10 +52,11 @@ public class LibraryServiceTest {
     }
     @Before
     public void prepareInjection() {
-        List<Book> books = new ArrayList<>();
+        User user = new User(1, "user-test", "pwd&test", "test01@thoughtworks.com", "13191818181");
         books.add(new Book(1, "BOOK A", "author A", Year.of(2010)));
         books.add(new Book(2, "BOOK B", "author B", Year.of(2011)));
         when(library.getBooks()).thenReturn(books);
+        when(library.getSession()).thenReturn(user);
         libraryService = new LibraryServiceImpl(library);
     }
     @After
@@ -95,5 +98,21 @@ public class LibraryServiceTest {
         Boolean result = libraryService.returnBook(2);
         assertThat(errContent.toString(), containsString(Message.BOOK_RETURN_INVALID));
         assertThat(result, equalTo(false));
+    }
+
+    @Test
+    public void givenCheckedBookWhenGetUserCheckedBooksThenReturnBook() {
+        User user = new User(2, "user-test", "pwd&test", "test01@thoughtworks.com", "13191818181");
+        Book book = new Book(3, "BOOK A", "author A", Year.of(2012));
+        book.setState(user);
+        books.add(book);
+        List<Book> res = libraryService.getUserCheckedBooks(user);
+        assertThat(res, hasItem(book));
+    }
+    @Test
+    public void givenNoCheckedBookWhenGetUserCheckedBooksThenReturnNull() {
+        User user = new User(2, "user-test", "pwd&test", "test01@thoughtworks.com", "13191818181");
+        List<Book> res = libraryService.getUserCheckedBooks(user);
+        assertThat(res, is(Collections.emptyList()));
     }
 }

@@ -2,8 +2,11 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.entities.Book;
 import com.twu.biblioteca.entities.Library;
+import com.twu.biblioteca.entities.User;
 import com.twu.biblioteca.services.LibraryService;
+import com.twu.biblioteca.services.UserService;
 import com.twu.biblioteca.services.impls.LibraryServiceImpl;
+import com.twu.biblioteca.services.impls.UserServiceImpl;
 import com.twu.biblioteca.tools.Message;
 import com.twu.biblioteca.views.ConsoleView;
 import org.junit.After;
@@ -35,7 +38,6 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ConsoleViewTest {
-    private static final String MENU = Library.NOTICE + "\n" + Library.MENU + "\n" + Message.MENU_INFO;
     private InputStream defaultIn = System.in;
     private PrintStream defaultOut = System.out, defaultErr = System.err;
 
@@ -43,6 +45,7 @@ public class ConsoleViewTest {
     private ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
     private LibraryService libraryService;
+    private UserService userService;
     private ConsoleView consoleView;
     private List<Book> books;
     private Scanner scanner;
@@ -58,11 +61,14 @@ public class ConsoleViewTest {
     @Before
     public void prepareInjection() {
         books = new ArrayList<>();
+        User user = new User(1, "test-01", "test&01", "test01@thoughtworks.com", "13191818181");
         books.add(new Book(1, "BOOK A", "author A", Year.of(2010)));
         books.add(new Book(2, "BOOK B", "author B", Year.of(2011)));
         when(library.getBooks()).thenReturn(books);
-        this.libraryService = new LibraryServiceImpl(library);
-        consoleView = new ConsoleView(scanner, libraryService, null);
+        when(library.getSession()).thenReturn(user);
+        libraryService = new LibraryServiceImpl(library);
+        userService = new UserServiceImpl(library);
+        consoleView = new ConsoleView(scanner, libraryService, null, null);
     }
     @After
     public void restoreStreams() {
@@ -81,15 +87,15 @@ public class ConsoleViewTest {
     @Test
     public void givenCheckListSequenceToMenuWhenConsoleMenuThenPrintContent() {
         scanner = new Scanner(new ByteArrayInputStream("1 -1".getBytes()));
-        consoleView = new ConsoleView(scanner, libraryService, null);
+        consoleView = new ConsoleView(scanner, libraryService, userService, null);
         consoleView.consoleMenu();
-        String str = MENU + this.listStr(this.books)+ Message.MENU_INFO;
-        assertEquals(str, outContent.toString());
+        String str = this.listStr(this.books)+ Message.MENU_INFO;
+        assertThat(outContent.toString(), containsString(str));
     }
     @Test
     public void givenWrongMenuSequenceWhenConsoleMenuThenPrintErrorMessage() {
-        scanner = new Scanner(new ByteArrayInputStream("7 -1".getBytes()));
-        consoleView = new ConsoleView(scanner, libraryService, null);
+        scanner = new Scanner(new ByteArrayInputStream("-9 -1".getBytes()));
+        consoleView = new ConsoleView(scanner, libraryService, userService, null);
         consoleView.consoleMenu();
         assertThat(errContent.toString(), containsString(Message.INPUT_INVALID));
     }

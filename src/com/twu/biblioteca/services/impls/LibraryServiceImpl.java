@@ -2,6 +2,7 @@ package com.twu.biblioteca.services.impls;
 
 import com.twu.biblioteca.entities.Book;
 import com.twu.biblioteca.entities.Library;
+import com.twu.biblioteca.entities.User;
 import com.twu.biblioteca.services.LibraryService;
 import com.twu.biblioteca.tools.Message;
 
@@ -22,19 +23,25 @@ public class LibraryServiceImpl implements LibraryService {
     }
     @Override
     public List<Book> getAllAvailableBooks() {
-        return this.getAllBooks().stream().filter(Book::getState).collect(Collectors.toList());
+        return this.getAllBooks().stream().filter(item -> null == item.getState()).collect(Collectors.toList());
     }
     @Override
     public List<Book> getAllBooks() { return library.getBooks(); }
     @Override
     public List<Book> getAllUnavailableBooks() {
-        return this.getAllBooks().stream().filter((i) -> !i.getState()).collect(Collectors.toList());
+        return this.getAllBooks().stream().filter((i) -> null != i.getState()).collect(Collectors.toList());
+    }
+    @Override
+    public List<Book> getUserCheckedBooks(User user) {
+        return this.getAllUnavailableBooks().stream().
+                filter(item -> item.getState().getUsername().equals(user.getUsername()))
+                .collect(Collectors.toList());
     }
     @Override
     public Boolean checkOut(int id) {
         try {
             Book book = this.getAllAvailableBooks().stream().filter(item -> item.getId().equals(id)).findFirst().get();
-            book.setState(false);
+            book.setState(library.getSession());
             System.out.println(Message.BOOK_VALID);
             return true;
         } catch (Exception e) {
@@ -47,7 +54,7 @@ public class LibraryServiceImpl implements LibraryService {
     public Boolean returnBook(int id) {
         try {
             Book book = this.getAllUnavailableBooks().stream().filter(item -> item.getId() == id).findFirst().get();
-            book.setState(true);
+            book.setState(null);
             System.out.println(Message.BOOK_RETURN_VALID);
             return true;
         } catch (Exception e) {

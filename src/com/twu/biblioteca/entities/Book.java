@@ -13,7 +13,7 @@ public class Book {
     private String name;
     private String author;
     private Year published;
-    private Boolean state = true;
+    private User state;
 
     public Book() {
     }
@@ -42,11 +42,11 @@ public class Book {
     }
 
 
-    public Boolean getState() {
+    public User getState() {
         return state;
     }
 
-    public void setState(Boolean state) {
+    public void setState(User state) {
         this.state = state;
     }
 
